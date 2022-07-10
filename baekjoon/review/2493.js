@@ -7,10 +7,6 @@ const solution = () => {
 
     const stack = []
     const result = new Array(N).fill(0);
-    let idx = stack.length;
-    for(let i = N - 1; i >= 0; i--) {
-            
-    }
 
     console.log(result);
 }
