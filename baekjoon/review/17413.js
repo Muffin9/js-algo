@@ -1,6 +1,5 @@
-// 출력형식이 잘못되었다 ?
 const fs = require('fs');
-const input = fs.readFileSync("17413.txt").toString();
+const input = fs.readFileSync("17413.txt").toString().trim();
 
 const solution = () => {
     let bracketFlag = false;
