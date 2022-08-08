@@ -1,30 +1,26 @@
+// 2번째 풀어보는 문제. 쉽게 해결함 10분소요
 function solution(board, moves) {
     const basket = [];
-    let result = 0;
-    for(let i = 0; i < moves.length; i++) {
-        const pick = moves[i] - 1;
+    let dolls = 0;
+    moves.forEach((num) => {
+        for(let i = 0; i < board.length; i++) {
+            let standard = 0;
+            if(board[i][num - 1]) {
+                standard = board[i][num-1];
+                board[i][num - 1] = 0;
+            }
 
-        for(let j = 0; j < board[pick].length; j++) {
-            if(board[j][pick] !== 0) {
-                basket.push(board[j][pick]);
-                board[j][pick] = 0;
+            if(standard) {
+                if(basket[basket.length - 1] === standard) {
+                    basket.pop();
+                    dolls += 2;
+                }
+                else basket.push(standard);
                 break;
             }
         }
-
-        if(basket.length >= 2) {
-            const doll1 = basket.pop();
-            const doll2 = basket.pop();
-
-            if(doll1 === doll2) result += 2;
-            else {
-                basket.push(doll2);
-                basket.push(doll1);
-            }
-        }
-    }
-    console.log(result);
-
+    });
+    return dolls;
 }
 
 const board = [[0,0,0,0,0],[0,0,1,0,3],[0,2,5,0,1],[4,2,4,4,2],[3,5,1,3,1]];
