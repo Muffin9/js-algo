@@ -5,25 +5,23 @@ function solution(n) {
     // 나머지 2이면 2
     const result = [];
     while(n > 0) {
-        const share = parseInt(n / 3);
-        const remain = n % 3;
-
+        const remain = Math.floor(n % 3);
+        const share = Math.floor(n / 3);
+        console.log(n);
         if(remain === 0) {
             result.push(4);
             n = share - 1;
         }
-        else if(remain === 1 || remain === 2) {
-            result.push(remain);
+        else if(remain === 1) {
+            result.push(1);
+            n = share;
+        }
+        else if(remain === 2) {
+            result.push(2);
             n = share;
         }
     }
-    let answer = '';
-    while(result.length !== 0) {
-        answer += result.pop();
-    }
-    console.log(answer);
-
-    return answer;
+    return result.reverse().join("");
 }
 
-solution(20);
+solution(15);
