@@ -1,8 +1,9 @@
+// attempts: 2회, time: 3분
 function solution(absolutes, signs) {
+    const len = absolutes.length;
     let answer = 0;
-    for(let i = 0; i < absolutes.length; i++) {
-        const value = signs[i] ? absolutes[i] : -absolutes[i];
-        answer += value;
+    for(let i = 0; i < len; i++) {
+        answer += signs[i] ? +absolutes[i] : -absolutes[i];
     }
     return answer;
 }

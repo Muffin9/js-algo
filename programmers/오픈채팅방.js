@@ -1,36 +1,41 @@
+// 2번째 풀어봄, 10분 소요됨
 function solution(record) {
-    const user = {};
+    const users = {};
     const rooms = [];
     const result = [];
-    for(let i = 0; i < record.lesngth; i++) {
-        const [command, id, name] = record[i].split(" ");
-        switch(command) {
-            case 'Enter':
-                rooms.push({id, command});
-                user[id] = name;
-                break;
-            case 'Leave':
-                rooms.push({id, command});
-                break;
-            case 'Change':
-                rooms.push({id, command});
-                user[id] = name;
-                break;
-        }
-    }
-    for(let i = 0; i < rooms.length; i++) {
-        const nickName = user[rooms[i].id];
-        const command = rooms[i].command;
-        
+
+    record.forEach((el) => {
+        const [command, id, nickName] = el.split(" ");
         switch(command) {
             case "Enter":
-                result.push(`${nickName}님이 들어왔습니다.`);
+                users[id] = nickName;
+                rooms.push({command: command, id: id});
                 break;
             case "Leave":
+                rooms.push({command: command, id: id});
+                break;
+            case "Change":
+                users[id] = nickName;
+                break;
+            default:
+                throw new Error("command is not found");
+        }
+    });
+    
+    rooms.forEach((room) => {
+        const command = room.command;
+        const nickName = users[room.id];
+
+        switch(command) {
+            case 'Enter':
+                result.push(`${nickName}님이 들어왔습니다.`);
+                break;
+            case 'Leave':
                 result.push(`${nickName}님이 나갔습니다.`);
                 break;
         }
-    }
+    });
+
     return result;
 }
 
