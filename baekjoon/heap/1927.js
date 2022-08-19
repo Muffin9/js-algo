@@ -1,94 +1,73 @@
 const fs = require('fs');
-const input = fs.readFileSync('1927.txt').toString().split("\n");
+const [_, ...input] = fs.readFileSync('1927.txt').toString().trim().split("\n");
 
 class MinHeap {
-    constructor(props) {
-       this.heap = [];
+    constructor() {
+        this.heap = [];
     }
 
     isEmpty() {
-        return this.heap.length === 0;
+        return this.heap.length ? false : true;
     }
 
-    insert(data) {
-        this.heap.push(data);
-        this.heapifyUp();
+    swap(value1, value2) {
+        return [this.heap[value1], this.heap[value2]] = [this.heap[value2], this.heap[value1]];
     }
 
-    delete() {
-        const data = this.heap[0];
+    insert(value) {
+        this.heap.push(value);
+        let currentIdx = this.heap.length - 1;
 
-        if(this.heap.length > 1) {
-            this.heap[0] = this.heap.pop();
-            this.heapifyDown();
-        } else {
-            this.heap.pop();
+        while(currentIdx > 0) {
+            const parentIdx = Math.floor((currentIdx) / 2);
+            if(this.heap[parentIdx] <= this.heap[currentIdx]) break;
+            this.swap(parentIdx, currentIdx);
+            currentIdx = parentIdx;
         }
-
-        return data;
     }
 
-    heapifyUp() {
-        let currentIndex = this.heap.length -1;
-        const currentData = this.heap[currentIndex];
-
-        while(currentIndex > 0) {
-            const parentIndex = Math.floor((currentIndex - 1) / 2);
-            const parentData = this.heap[parentIndex];
-
-            if(currentData >= parentData) break;
-
-            this.heap[currentIndex] = parentData;
-            currentIndex = parentIndex;
+    getMin() {
+        if(this.heap.length === 1) {
+            return this.heap.pop();
         }
-
-        this.heap[currentIndex] = currentData;
-    }
-
-    heapifyDown() {
-        let currentIndex = 0;
-        const currentData = this.heap[currentIndex];
-
-        while(currentIndex < this.heap.length) {
-            const leftChildIndex = currentIndex * 2 + 1;
-            const rightChildIndex = currentIndex * 2 + 2;
-
-            if(leftChildIndex >= this.heap.length) break;
-
-            const leftChidData = this.heap[leftChildIndex];
-            const rightChildData = rightChildIndex < this.heap.length ? this.heap[rightChildIndex] : null;
-
-            const smallerIndex = rightChildData !== null && rightChildData < leftChidData ? rightChildIndex : leftChildIndex;
-
-            const smallerData = this.heap[smallerIndex];
-
-            if(currentData < smallerData) break;
-
-            this.heap[currentIndex] = smallerData;
-            currentIndex = smallerIndex;
-        }
-
-        this.heap[currentIndex] = currentData;
+        const minValue = this.heap[0];
+        this.heap[0] = this.heap.pop();
+        this.heapify(0);
+        return minValue;
     }
     
+    heapify(idx) {
+        const leftIdx = 2 * idx;
+        const rightIdx = 2 * idx + 1;
+        const len = this.heap.length;
+        let smallestIdx = idx;
+
+        if(leftIdx < len && this.heap[leftIdx] < this.heap[smallestIdx]) smallestIdx = leftIdx;
+
+        if(rightIdx < len && this.heap[rightIdx] < this.heap[smallestIdx]) smallestIdx = rightIdx;
+
+        if(smallestIdx !== idx) {
+            this.swap(smallestIdx, idx);
+            this.heapify(smallestIdx);
+        }
+    }
 }
 
 const solution = () => {
-    const N = +input.shift();
     const minHeap = new MinHeap();
-    const heap = [];
-
-    for(let i = 0; i < N; i++) {
-        const value = +input.shift();
-        if(value > 0) {
-            minHeap.insert(value);
-        } else if(minHeap.isEmpty()){
-            heap.push(0);
-        } else {
-            heap.push(minHeap.delete());
-        }
-    }
-    console.log(heap.join("\n"));
+    let answer = '';
+    input.forEach((value) => {
+        if (+value === 0) {
+            if (minHeap.isEmpty()) {
+              answer += `0\n`;
+            } else {
+              answer += `${minHeap.getMin()}\n`;
+            }
+          } else {
+            minHeap.insert(+value);
+          }
+    })
+    console.log(answer);
 }
 
 solution();
