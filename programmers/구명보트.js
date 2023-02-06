@@ -3,6 +3,7 @@ function solution(people, limit) {
   let cnt = 0;
   let left = 0;
   let right = people.length - 1;
+
   while (left <= right) {
     const sum = people[left] + people[right];
 
@@ -14,10 +15,11 @@ function solution(people, limit) {
     }
     cnt += 1;
   }
+
   return cnt;
 }
 
 // 50 50 70 80
 
 solution([70, 50, 80, 50], 100);
-// solution([70, 80, 50], 100);
+solution([70, 80, 50], 100);
