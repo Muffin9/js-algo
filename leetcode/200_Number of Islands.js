@@ -9,9 +9,11 @@ var numIslands = function (grid) {
   const rowLen = grid.length;
   const colLen = grid[0].length;
 
-  const visited = new Array(rowLen).fill(new Array(colLen).fill(false));
+  const visited = Array.from({ length: rowLen }, () =>
+    Array(colLen).fill(false)
+  );
 
-  let islandCount = 0;
+  let landCount = 0;
 
   const bfs = (y, x) => {
     const queue = [[y, x]];
@@ -22,10 +24,16 @@ var numIslands = function (grid) {
         const nextX = x + dx[i];
         const nextY = y + dy[i];
 
-        if (nextX < 0 || nextY < 0 || nextX >= colLen || nextY >= rowLen)
+        if (
+          nextX < 0 ||
+          nextY < 0 ||
+          nextX >= colLen ||
+          nextY >= rowLen ||
+          visited[nextY][nextX]
+        )
           continue;
 
-        if (grid[nextY][nextX] === "1" && !visited[nextY][nextX]) {
+        if (grid[nextY][nextX] === "1") {
           visited[nextY][nextX] = true;
           queue.push([nextY, nextX]);
         }
@@ -36,25 +44,31 @@ var numIslands = function (grid) {
   for (let y = 0; y < rowLen; y++) {
     for (let x = 0; x < colLen; x++) {
       if (!visited[y][x] && grid[y][x] === "1") {
-        islandCount += 1;
+        landCount += 1;
         bfs(y, x);
       }
     }
   }
 
-  console.log(islandCount);
+  return landCount;
 };
 
-numIslands([
-  ["1", "1", "1", "1", "0"],
-  ["1", "1", "0", "1", "0"],
-  ["1", "1", "0", "0", "0"],
-  ["0", "0", "0", "0", "0"],
-]);
+// numIslands([
+//   ["1", "1", "1", "1", "0"],
+//   ["1", "1", "0", "1", "0"],
+//   ["1", "1", "0", "0", "0"],
+//   ["0", "0", "0", "0", "0"],
+// ]);
+
+// numIslands([
+//   ["1", "1", "0", "0", "0"],
+//   ["1", "1", "0", "0", "0"],
+//   ["0", "0", "1", "0", "0"],
+//   ["0", "0", "0", "1", "1"],
+// ]);
 
 numIslands([
-  ["1", "1", "0", "0", "0"],
-  ["1", "1", "0", "0", "0"],
-  ["0", "0", "1", "0", "0"],
-  ["0", "0", "0", "1", "1"],
+  ["0", "1", "0"],
+  ["1", "0", "1"],
+  ["0", "1", "0"],
 ]);
